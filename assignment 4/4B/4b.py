@@ -464,7 +464,7 @@ from google.colab.patches import cv2_imshow
 cv2_imshow( dog)
 cv2_imshow(superimposed_img)
 
-from skimage import io
+#from skimage import io
 horse = io.imread("https://cdn.britannica.com/96/1296-050-4A65097D/gelding-bay-coat.jpg")
 horse = cv2.resize(horse, dsize=(32, 32), interpolation=cv2.INTER_CUBIC)
 x = image.img_to_array(horse)
@@ -497,7 +497,7 @@ from google.colab.patches import cv2_imshow
 cv2_imshow( horse)
 cv2_imshow(superimposed_img)
 
-from skimage import io
+#from skimage import io
 cat = io.imread("http://imgstocks.com/wp-content/uploads/2014/01/File-cat-march-2010-1-jpg-wikimedia-commons-1280x800.jpg")
 cat = cv2.resize(cat, dsize=(32, 32), interpolation=cv2.INTER_CUBIC)
 x = image.img_to_array(cat)
@@ -528,4 +528,229 @@ heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
 superimposed_img = cv2.addWeighted(cat, 0.5, heatmap, 0.5, 0)
 from google.colab.patches import cv2_imshow
 cv2_imshow( cat)
+cv2_imshow(superimposed_img)
+
+airplane = io.imread("https://compote.slate.com/images/222e0b84-f164-4fb1-90e7-d20bc27acd8c.jpg")
+airplane = cv2.resize(airplane, dsize=(32, 32), interpolation=cv2.INTER_CUBIC)
+x = image.img_to_array(airplane)
+x = np.expand_dims(x, axis=0)
+x = preprocess_input(x)
+
+preds = model.predict(x)
+class_idx = np.argmax(preds[0])
+print(class_idx)
+class_output = model.output[:, class_idx]
+last_conv_layer = model.get_layer("conv2d_41") #conv2d_42
+
+grads = K.gradients(class_output, last_conv_layer.output)[0]
+print(grads.shape)
+pooled_grads = K.mean(grads, axis=(0, 1, 2))
+print(pooled_grads.shape)
+iterate = K.function([model.input], [pooled_grads, last_conv_layer.output[0]])
+
+pooled_grads_value, conv_layer_output_value = iterate([x])
+heatmap = np.mean(conv_layer_output_value, axis = -1)
+print(conv_layer_output_value.shape)
+print(heatmap.shape)
+heatmap = np.maximum(heatmap, 0)
+heatmap /= np.max(heatmap)
+heatmap = cv2.resize(heatmap, (airplane.shape[1], airplane.shape[0]))
+heatmap = np.uint8(255 * heatmap)
+heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
+superimposed_img = cv2.addWeighted(airplane, 0.5, heatmap, 0.5, 0)
+from google.colab.patches import cv2_imshow
+cv2_imshow( airplane)
+cv2_imshow(superimposed_img)
+
+automobile = io.imread("https://img.theweek.in/content/dam/week/news/biz-tech/images/2019/9/1/Automobile-slowdown-Sreemanikandan.jpg")
+automobile = cv2.resize(automobile, dsize=(32, 32), interpolation=cv2.INTER_CUBIC)
+x = image.img_to_array(automobile)
+x = np.expand_dims(x, axis=0)
+x = preprocess_input(x)
+
+preds = model.predict(x)
+class_idx = np.argmax(preds[0])
+print(class_idx)
+class_output = model.output[:, class_idx]
+last_conv_layer = model.get_layer("conv2d_41") #conv2d_42
+
+grads = K.gradients(class_output, last_conv_layer.output)[0]
+print(grads.shape)
+pooled_grads = K.mean(grads, axis=(0, 1, 2))
+print(pooled_grads.shape)
+iterate = K.function([model.input], [pooled_grads, last_conv_layer.output[0]])
+
+pooled_grads_value, conv_layer_output_value = iterate([x])
+heatmap = np.mean(conv_layer_output_value, axis = -1)
+print(conv_layer_output_value.shape)
+print(heatmap.shape)
+heatmap = np.maximum(heatmap, 0)
+heatmap /= np.max(heatmap)
+heatmap = cv2.resize(heatmap, (automobile.shape[1], automobile.shape[0]))
+heatmap = np.uint8(255 * heatmap)
+heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
+superimposed_img = cv2.addWeighted(automobile, 0.5, heatmap, 0.5, 0)
+from google.colab.patches import cv2_imshow
+cv2_imshow( automobile)
+cv2_imshow(superimposed_img)
+
+bird = io.imread("https://www.hakaimagazine.com/wp-content/uploads/header-gulf-birds.jpg")
+bird = cv2.resize(bird, dsize=(32, 32), interpolation=cv2.INTER_CUBIC)
+x = image.img_to_array(bird)
+x = np.expand_dims(x, axis=0)
+x = preprocess_input(x)
+
+preds = model.predict(x)
+class_idx = np.argmax(preds[0])
+print(class_idx)
+class_output = model.output[:, class_idx]
+last_conv_layer = model.get_layer("conv2d_41") #conv2d_42
+
+grads = K.gradients(class_output, last_conv_layer.output)[0]
+print(grads.shape)
+pooled_grads = K.mean(grads, axis=(0, 1, 2))
+print(pooled_grads.shape)
+iterate = K.function([model.input], [pooled_grads, last_conv_layer.output[0]])
+
+pooled_grads_value, conv_layer_output_value = iterate([x])
+heatmap = np.mean(conv_layer_output_value, axis = -1)
+print(conv_layer_output_value.shape)
+print(heatmap.shape)
+heatmap = np.maximum(heatmap, 0)
+heatmap /= np.max(heatmap)
+heatmap = cv2.resize(heatmap, (bird.shape[1], bird.shape[0]))
+heatmap = np.uint8(255 * heatmap)
+heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
+superimposed_img = cv2.addWeighted(bird, 0.5, heatmap, 0.5, 0)
+from google.colab.patches import cv2_imshow
+cv2_imshow( bird)
+cv2_imshow(superimposed_img)
+
+frog = io.imread("https://ichef.bbci.co.uk/news/320/cpsprodpb/103CF/production/_106211566_scheele2hr.jpg")
+frog = cv2.resize(frog, dsize=(32, 32), interpolation=cv2.INTER_CUBIC)
+x = image.img_to_array(frog)
+x = np.expand_dims(x, axis=0)
+x = preprocess_input(x)
+
+preds = model.predict(x)
+class_idx = np.argmax(preds[0])
+print(class_idx)
+class_output = model.output[:, class_idx]
+last_conv_layer = model.get_layer("conv2d_41") #conv2d_42
+
+grads = K.gradients(class_output, last_conv_layer.output)[0]
+print(grads.shape)
+pooled_grads = K.mean(grads, axis=(0, 1, 2))
+print(pooled_grads.shape)
+iterate = K.function([model.input], [pooled_grads, last_conv_layer.output[0]])
+
+pooled_grads_value, conv_layer_output_value = iterate([x])
+heatmap = np.mean(conv_layer_output_value, axis = -1)
+print(conv_layer_output_value.shape)
+print(heatmap.shape)
+heatmap = np.maximum(heatmap, 0)
+heatmap /= np.max(heatmap)
+heatmap = cv2.resize(heatmap, (frog.shape[1], frog.shape[0]))
+heatmap = np.uint8(255 * heatmap)
+heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
+superimposed_img = cv2.addWeighted(frog, 0.5, heatmap, 0.5, 0)
+from google.colab.patches import cv2_imshow
+cv2_imshow( frog)
+cv2_imshow(superimposed_img)
+
+ship = io.imread("https://specials-images.forbesimg.com/imageserve/5dd2ed8de0af7b0006b19dfc/960x0.jpg")
+ship = cv2.resize(ship, dsize=(32, 32), interpolation=cv2.INTER_CUBIC)
+x = image.img_to_array(ship)
+x = np.expand_dims(x, axis=0)
+x = preprocess_input(x)
+
+preds = model.predict(x)
+class_idx = np.argmax(preds[0])
+print(class_idx)
+class_output = model.output[:, class_idx]
+last_conv_layer = model.get_layer("conv2d_41") #conv2d_42
+
+grads = K.gradients(class_output, last_conv_layer.output)[0]
+print(grads.shape)
+pooled_grads = K.mean(grads, axis=(0, 1, 2))
+print(pooled_grads.shape)
+iterate = K.function([model.input], [pooled_grads, last_conv_layer.output[0]])
+
+pooled_grads_value, conv_layer_output_value = iterate([x])
+heatmap = np.mean(conv_layer_output_value, axis = -1)
+print(conv_layer_output_value.shape)
+print(heatmap.shape)
+heatmap = np.maximum(heatmap, 0)
+heatmap /= np.max(heatmap)
+heatmap = cv2.resize(heatmap, (ship.shape[1], ship.shape[0]))
+heatmap = np.uint8(255 * heatmap)
+heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
+superimposed_img = cv2.addWeighted(ship, 0.5, heatmap, 0.5, 0)
+from google.colab.patches import cv2_imshow
+cv2_imshow( ship)
+cv2_imshow(superimposed_img)
+
+truck = io.imread("https://www.team-bhp.com/forum/attachments/commercial-vehicles/1330981d1421754384-volvo-eicher-launches-pro-6000-series-truck-pro-6031.jpg")
+truck = cv2.resize(truck, dsize=(32, 32), interpolation=cv2.INTER_CUBIC)
+x = image.img_to_array(truck)
+x = np.expand_dims(x, axis=0)
+x = preprocess_input(x)
+
+preds = model.predict(x)
+class_idx = np.argmax(preds[0])
+print(class_idx)
+class_output = model.output[:, class_idx]
+last_conv_layer = model.get_layer("conv2d_41") #conv2d_42
+
+grads = K.gradients(class_output, last_conv_layer.output)[0]
+print(grads.shape)
+pooled_grads = K.mean(grads, axis=(0, 1, 2))
+print(pooled_grads.shape)
+iterate = K.function([model.input], [pooled_grads, last_conv_layer.output[0]])
+
+pooled_grads_value, conv_layer_output_value = iterate([x])
+heatmap = np.mean(conv_layer_output_value, axis = -1)
+print(conv_layer_output_value.shape)
+print(heatmap.shape)
+heatmap = np.maximum(heatmap, 0)
+heatmap /= np.max(heatmap)
+heatmap = cv2.resize(heatmap, (truck.shape[1], truck.shape[0]))
+heatmap = np.uint8(255 * heatmap)
+heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
+superimposed_img = cv2.addWeighted(truck, 0.5, heatmap, 0.5, 0)
+from google.colab.patches import cv2_imshow
+cv2_imshow( truck)
+cv2_imshow(superimposed_img)
+
+deer = io.imread("http://www.yedraw.com/forest-animals/deer.jpg")
+deer = cv2.resize(deer, dsize=(32, 32), interpolation=cv2.INTER_CUBIC)
+x = image.img_to_array(deer)
+x = np.expand_dims(x, axis=0)
+x = preprocess_input(x)
+
+
+preds = model.predict(x)
+class_idx = np.argmax(preds[0])
+print(class_idx)
+class_output = model.output[:, class_idx]
+last_conv_layer = model.get_layer("conv2d_41") #conv2d_42
+
+grads = K.gradients(class_output, last_conv_layer.output)[0]
+print(grads.shape)
+pooled_grads = K.mean(grads, axis=(0, 1, 2))
+print(pooled_grads.shape)
+iterate = K.function([model.input], [pooled_grads, last_conv_layer.output[0]])
+
+pooled_grads_value, conv_layer_output_value = iterate([x])
+heatmap = np.mean(conv_layer_output_value, axis = -1)
+print(conv_layer_output_value.shape)
+print(heatmap.shape)
+heatmap = np.maximum(heatmap, 0)
+heatmap /= np.max(heatmap)
+heatmap = cv2.resize(heatmap, (deer.shape[1], deer.shape[0]))
+heatmap = np.uint8(255 * heatmap)
+heatmap = cv2.applyColorMap(heatmap, cv2.COLORMAP_JET)
+superimposed_img = cv2.addWeighted(deer, 0.5, heatmap, 0.5, 0)
+from google.colab.patches import cv2_imshow
+cv2_imshow( deer)
 cv2_imshow(superimposed_img)
